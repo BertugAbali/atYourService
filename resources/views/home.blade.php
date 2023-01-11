@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+<!-- This view for showing the services based on your chosed category. If you didn't chosed any, it will show all of it. -->
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -32,7 +34,12 @@
                     @include('partials.list')
                 </div>
             </div>
+
+        </div>
+        <div class="d-flex justify-content-center">
+            {!! $services->links('pagination::bootstrap-5') !!}
         </div>
     </div>
+   
 </div>
 @endsection

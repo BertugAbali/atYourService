@@ -7,7 +7,7 @@
         <div class="card-body">
         <a href="{{ route('show.service', ['service' => $service]) }}">
                 <h5 class="card-title">{{$service->title}}</h5>
-                <p class="card-text">{{$service->detail}}</p>
+                <p class="card-text">{{ Str::limit($service->detail, 100) }}</p>
             </a>
         </div>
         <div class="card-footer">

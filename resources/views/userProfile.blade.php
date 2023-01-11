@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+<!-- This view for showing the profile of chosed user. -->
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">

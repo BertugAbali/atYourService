@@ -1,9 +1,12 @@
 @extends('layouts.app')
 
+<!-- This view for showing the chosed service. -->
+
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="card">
                 <img src="{{asset('storage/images/'.$service->path)}}" alt="{{$service->name}}" class="card-img-top">
                 <div class="card-body">

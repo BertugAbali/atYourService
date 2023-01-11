@@ -19,6 +19,7 @@ a:active { text-decoration: none;  color: black;}
     </style>
 
 
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 

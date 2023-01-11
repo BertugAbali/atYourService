@@ -18,28 +18,29 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth','verified']);
+        $this->middleware(['auth', 'verified']);
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+    // It will return all services and service areas to home page.
+
     public function index()
     {
-        $services = Service::all();
+        $services = Service::paginate(8);
         $service_areas = Service_Areas::all();
         return view('home', compact('services'), compact('service_areas'));
     }
+
+    // It will return some services based on your chosed service area and all service areas to home page.
 
     public function area($area)
     {
-        $services = Service::where('area', $area)->get();
+        $services = Service::where('area', $area)->paginate(8);
 
         $service_areas = Service_Areas::all();
         return view('home', compact('services'), compact('service_areas'));
     }
+
+    // It will return chosed user profile.
 
     public function userProfile($user_id)
     {
@@ -48,11 +49,15 @@ class HomeController extends Controller
 
         return view('userProfile', compact('user'));
     }
-    
+
+    // It will return auth user profile.
+
     public function profile()
     {
         return view('profile');
     }
+
+    // It will return page of becoming service provider page.
 
     public function becomeProvider()
     {
@@ -63,5 +68,11 @@ class HomeController extends Controller
     public function startNewService()
     {
         return view('startNewService');
+    }
+
+    public function showServices(User $user)
+    {
+        $services = Service::where('owner_id', $user->id)->paginate(20);
+        return view('showServices',compact('services'));
     }
 }

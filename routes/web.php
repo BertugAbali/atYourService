@@ -40,16 +40,16 @@ Route::get('/profile', [HomeController::class, 'profile'])->name('profile');
 Route::post('/startNewService', [HomeController::class, 'startNewService'])->name('startNewService');
 Route::get('/startNewService', [HomeController::class, 'startNewService'])->name('startNewService');
 
+Route::post('/showOwnedServices/{user}', [HomeController::class, 'showServices'])->name('show.ownedServices');
+
 Route::post('/becomeProvider', [HomeController::class, 'becomeProvider'])->name('becomeProvider');
 
 
 Route::get('show/{service}', [ServiceController::class, 'show'])->name('show.service');
-
+Route::post('delete/{service}', [ServiceController::class, 'delete'])->name('delete.service');
 
 Route::post('/user/update/{user}', [UserController::class, 'update']);
-Route::post('/user/destroy/{user}', [UserController::class, 'destroy']);
-
-// Route::post('/stripe/{service}', [StripePaymentController::class, 'stripePost'])->name('stripe.post');
+Route::post('/user/destroy/{user}', [UserController::class, 'destroy'])->name('destroy.user');
 
 Route::post('/stripe/{service}', [StripePaymentController::class, 'stripe'])->name('stripe');
 

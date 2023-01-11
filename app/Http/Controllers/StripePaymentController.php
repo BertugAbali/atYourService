@@ -13,21 +13,22 @@ use App\Http\Controllers\Auth;
      
 class StripePaymentController extends Controller
 {
-    /**
-     * success response method.
-     *
-     * @return \Illuminate\Http\Response
-     */
+  
+    // it will return pay page based on chosed service
+
     public function stripe(Service $service)
     {
         return view('stripe',compact('service'));
     }
     
-    /**
-     * success response method.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
+    /*
+
+     This funtion will try the paying based on your card informations if the transaction successfull, it will return main page but
+     if it not, it will return paying page with an error. Also it will save a transaction to database.
+
+    */
+
     public function stripePost(Request $request)
     {
         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -49,9 +50,6 @@ class StripePaymentController extends Controller
         $transaction->token=$request->stripeToken;
         $transaction->amount=$service->price;
         $transaction->save();
-      
-      //  Session::flash('success', 'Payment successful!');
-
               
         return redirect('/');
     }

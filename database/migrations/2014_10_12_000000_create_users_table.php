@@ -22,7 +22,6 @@ return new class extends Migration
             $table->boolean('is_provider')->default(false);
             $table->string('password');
             $table->string('area')->default("");
-            $table->string('owned_services')->default("");
             $table->string('about')->default("");
             $table->integer('exprience')->default(0);
             $table->rememberToken();

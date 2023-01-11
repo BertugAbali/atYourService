@@ -1,7 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Service;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 use Illuminate\Http\Request;
@@ -18,45 +21,14 @@ class UserController extends Controller
         return view('profile', ['user' => $user]);
     }
 
-    public function create()
-    {
-        return view('users.create');
-    }
-
-    public function store(Request $request)
-    {
-        // $student = new Student;
-        // $student->firstName = $request->firstName;
-        // $student->lastName = $request->lastName;
-
-        // $student->save();
-
-
-        $request->validate([
-            'firstName' => 'required|min:5|max:20',
-            'lastName' => 'required|min:5|max:20',
-            'email' => 'required|min:5',
-            'email' => 'required',
-            'password' => 'required|min:5',
-        ]);
-
-        $create=User::create($request->all());
-
-        if ($create){
-            return redirect('/users/profile');
-
-        }else{
-            return view('users.create');
-        }
-        
-
-    //    return view('users.profile', ['user' => $request]);
-    }
+    
 
     public function edit(User $user)
     {
         return view('users.edit', ['user' => $user]);
     }
+
+    // This function update the player as a service provider
 
     public function update(Request $request, User $user)
     {
@@ -64,8 +36,15 @@ class UserController extends Controller
         return redirect('profile');
     }
 
+    // This functions delete the user and his/her belonged services with their images.
+
     public function destroy(User $user)
     {
+        $services = DB::table('services')->where('owner_id', $user->id)->get()->toArray();
+        foreach($services as $service){
+            unlink(public_path() . '/storage/images/' .$service->path);
+        }
+        DB::table('services')->where('owner_id', $user->id)->delete();
         $user->delete();
         return redirect('/');
     }

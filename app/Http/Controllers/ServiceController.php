@@ -12,24 +12,6 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,7 +24,7 @@ class ServiceController extends Controller
         $request->validate([
             'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'title' => ['required', 'string', 'max:255'],
-            'detail' => ['required', 'string', 'max:1000'],
+            'detail' => ['required', 'string', 'max:2000'],
             'price' => ['required', 'integer', 'min:1'],
         ]);
 
@@ -58,62 +40,21 @@ class ServiceController extends Controller
         $service->owner_id = $request->owner_id;
         $service->path = $request->file('image')->hashName();
         $service->save();
-
-        $user = new User();
-        $user = DB::table('users')->where('id', $service->owner_id)->first();
-
-        $user->owned_services = $user->owned_services . $service->id . ',' ;
-
-        $affected = DB::table('users')
-              ->where('id', $user->id)
-              ->update(['owned_services' => $user->owned_services]);
-
+        
         return redirect('profile');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
     public function show(Service $service)
     {
 
         return view('showService', ['service' => $service]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Service $service)
+    public function delete(Service $service)
     {
-        //
+        unlink(public_path() . '/storage/images/' .$service->path);
+        $service->delete();
+        return view('profile');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Service $service)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Service $service)
-    {
-        //
-    }
 }

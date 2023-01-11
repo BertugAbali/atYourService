@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+<!-- This view for service provider configurations. -->
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
