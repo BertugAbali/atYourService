@@ -30,6 +30,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'area',
         'exprience',
         'about',
+
+        'avatar',
+        'stripe_connect_id',
+        'completed_stripe_onboarding',
     ];
 
     /**
@@ -49,5 +53,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'completed_stripe_onboarding' => 'bool',
     ];
 }

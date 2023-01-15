@@ -29,10 +29,12 @@
                             <p>{{ Session::get('success') }}</p>
                         </div>
                     @endif
-    
+                    @if ($errors->any())
+                    <h4 class="bg-red-50 text-red-800 py-2 px-2 rounded-md shadow-md mb-2"> {{ $errors->first() }} </h4>
+                @endif
                         <form 
                             role="form" 
-                            action="{{  route('stripe.post', ['service' => $service])  }}" 
+                            action="{{  route('complete.purchase', ['service' =>$service])  }}" 
                             method="post" 
                             class="require-validation"
                             data-cc-on-file="false"
@@ -50,7 +52,7 @@
                         <div class='form-row row'>
                             <div class='col-xs-12 form-group card required'>
                                 <label class='control-label'>Card Number</label> 
-                                <input autocomplete='off' class='form-control card-number' size='20' type='text'>
+                                <input autocomplete='off' class='form-control card-number' size='20' type='text' value="4242 4242 4242 4242">
                             </div>
                         </div>
     
@@ -89,7 +91,7 @@
 </div>
     
 </body>
-    
+
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
     
 <script type="text/javascript">
@@ -154,9 +156,6 @@ $(function() {
                  
             $form.find('input[type=text]').empty();
             $form.append("<input type='hidden' name='stripeToken' value='" + token + "'/>");
-            $form.find('input[type=number]').empty();
-            $form.append("<input type='hidden' name='price' value='"+20+"'/>");
-            $form.get(1);
             $form.get(0).submit();
         }
     }

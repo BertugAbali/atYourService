@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-        <img src="{{asset('storage/images/logo/logo.PNG')}}" width="50" height="50" alt="">
- At Your Service
+            <img src="{{asset('storage/images/logo/logo.PNG')}}" width="50" height="50" alt="">
+            At Your Service
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
             <span class="navbar-toggler-icon"></span>
@@ -11,8 +11,47 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav me-auto">
-            
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/About">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                        Categories
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+
+                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Photographer']) }}">
+                            Photographer
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Programmer']) }}">
+                            Programmer
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Designer']) }}">
+                            Designer
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Writer']) }}">
+                            Writer
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Content Creator']) }}">
+                            Content Creator
+                        </a>
+
+                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Artist']) }}">
+                            Artist
+                        </a>
+
+                    </div>
+                </li>
             </ul>
+
 
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ms-auto">
@@ -37,7 +76,7 @@
 
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                        <a class="dropdown-item" href="{{ route('profile') }}">
+                        <a class="dropdown-item" href="{{ route('profile',['id' => Auth::user()->id]) }}">
                             {{ __('Profile') }}
                         </a>
 

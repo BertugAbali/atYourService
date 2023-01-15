@@ -21,11 +21,17 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_provider')->default(false);
             $table->string('password');
-            $table->string('area')->default("");
-            $table->string('about')->default("");
-            $table->integer('exprience')->default(0);
+            $table->string('area')->nullable();
+            $table->string('about')->nullable();
+            $table->integer('exprience')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->string('avatar')->nullable();
+            $table->string('stripe_connect_id')->nullable();
+            $table->boolean('completed_stripe_onboarding')->default(false);
+
+
         });
     }
 

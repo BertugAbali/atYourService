@@ -25,6 +25,12 @@ class UserFactory extends Factory
             'is_provider' => false,   
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
+
+            'avatar' => sprintf(
+                'https://randomuser.me/api/portraits/%s/%d.jpg',
+                $this->faker->randomElement(['men','women']),
+                $this->faker->numberBetween(1,99)
+            )
         ];
     }
 

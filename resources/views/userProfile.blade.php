@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="card-body">
-                    {{ __('About Yourself: ') }} {{ $user->about }}
+                    {{ __('About: ') }} {{ $user->about }}
 
                 </div>
 

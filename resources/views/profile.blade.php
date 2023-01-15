@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header">{{ __('Profile') }}</div>
 
-                
+
                 <div class="card-body">
                     {{ __('First Name:  ') }} {{ Auth::user()->firstName }}
 
@@ -25,7 +25,51 @@
 
                 </div>
 
+                @if ($errors->any())
+                    <h4 class="bg-red-50 text-red-800 py-2 px-2 rounded-md shadow-md mb-2"> {{ $errors->first() }} </h4>
+                @endif
+
+                
+
+                <img src=" @if (Auth::user()->avatar){{ Auth::user()->avatar }} @else {{asset('storage/images/logo/empty-logo.webp')}} @endif" alt="Profile Image" class="img-fluid rounded-circle w-25 h-25">
+
                 @if (Auth::user()->is_provider)
+
+                @if (!Auth::user()->completed_stripe_onboarding)
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="startNewService" action="{{ route('redirect.stripe',['id' => Auth::user()->id]) }}">
+                        @csrf
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-warning" id="submit">Connect Stripe Account</button>
+                            </div>
+                            <div class="col-md-6">
+                                <p> Not Connected </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                @else
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data" id="startNewService" action="{{ route('redirect.stripe', ['id' => Auth::user()->id]) }}">
+                        @csrf
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary" id="submit">View Stripe Account</button>
+                            </div>
+                            <div class="col-md-3">
+                                <p> Connected </p>
+                            </div>
+                            <div class="col-md-3">
+                                <p> € {{$balance}} </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                @endif
 
                 <div class="card-body">
                     {{ __('Area: ') }} {{ Auth::user()->area }}

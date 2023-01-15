@@ -37,7 +37,7 @@ class HomeController extends Controller
         $services = Service::where('area', $area)->paginate(8);
 
         $service_areas = Service_Areas::all();
-        return view('home', compact('services'), compact('service_areas'));
+        return view('home', compact('services'), compact('area'));
     }
 
     // It will return chosed user profile.
@@ -48,13 +48,6 @@ class HomeController extends Controller
         $user = DB::table('users')->where('id', $user_id)->first();
 
         return view('userProfile', compact('user'));
-    }
-
-    // It will return auth user profile.
-
-    public function profile()
-    {
-        return view('profile');
     }
 
     // It will return page of becoming service provider page.
