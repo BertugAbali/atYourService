@@ -95,6 +95,9 @@ class UserController extends Controller
         foreach($services as $service){
             unlink(public_path() . '/storage/images/' .$service->path);
         }
+        if($user->avatar != 'avatar.png'){
+            unlink(public_path() . '/storage/users-avatar/' .$user->avatar);
+        }
         DB::table('services')->where('owner_id', $user->id)->delete();
         DB::table('stripe_state_tokens')->where('seller_id', $user->id)->delete();
         $user->delete();
