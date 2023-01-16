@@ -10,12 +10,13 @@
                 <p class="card-text">{{ Str::limit($service->detail, 100) }}</p>
             </a>
         </div>
+        <!--
         <div class="card-footer">
             <a href="{{ route('show.profile', ['id' => $service->owner_id]) }}">
-                <small class="text-muted">{{$service->owner}}</small>
+                <small class="text-muted">{{}}</small>
             </a>
         </div>
-
+-->
     </div>
 </div>
 

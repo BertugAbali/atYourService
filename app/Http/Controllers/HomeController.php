@@ -58,7 +58,14 @@ class HomeController extends Controller
         return view('becomeProvider', compact('areas'));
     }
 
-    public function startNewService()
+     // It will return page of user edit page.
+
+     public function editUser()
+     {
+         return view('editUser');
+     }
+
+    public function createService()
     {
         return view('startNewService');
     }

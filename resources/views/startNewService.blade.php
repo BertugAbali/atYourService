@@ -7,10 +7,17 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Become Service Provider') }}</div>
+                <div class="card-header">{{ __('Start New Service') }}</div>
+
+                @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error:</strong>  {{ $errors->first() }} 
+                </div>
+              
+                @endif
 
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" id="upload-image" action="{{ route('create.service') }}">
+                    <form method="POST" enctype="multipart/form-data" id="upload-image" action="{{ route('save.service') }}">
                         @csrf
                         <div class="row">
 
@@ -33,7 +40,7 @@
                                 </div>
                             </div>
 
-                            <input hidden id="owner" type="text" class="form-control " name="owner" value="{{ Auth::user()->firstName . ' ' .  Auth::user()->lastName }}" required>
+                            <input hidden id="owner" type="text" class="form-control " name="owner" value="{{ Auth::user()->name }}" required>
 
                             <input hidden id="owner_id" type="text" class="form-control " name="owner_id" value="{{ Auth::user()->id }}" required>
 
@@ -71,7 +78,7 @@
                                 <label for="" class="col-md-4 col-form-label text-md-end"></label>
 
                                 <div class="col-md-6">
-                                    <button type="submit" class="btn btn-primary" id="submit">Start Your Service</button>
+                                    <button type="submit" class="btn btn-outline-primary" id="submit">Start Your Service</button>
                                 </div>
                             </div>
 

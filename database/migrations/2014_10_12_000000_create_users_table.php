@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('firstName');
-            $table->string('lastName');
+            $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_provider')->default(false);
@@ -26,8 +25,11 @@ return new class extends Migration
             $table->integer('exprience')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->string('address')->nullable();
+            $table->string('country');
+            $table->string('phone')->nullable();
 
-            $table->string('avatar')->nullable();
+            $table->string('avatar')->default('avatar.png');
             $table->string('stripe_connect_id')->nullable();
             $table->boolean('completed_stripe_onboarding')->default(false);
 

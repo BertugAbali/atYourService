@@ -35,26 +35,25 @@ class ServiceController extends Controller
         $service->title = $request->title;
         $service->detail = $request->detail;
         $service->price = $request->price;
-        $service->owner = $request->owner;
         $service->area = $request->area;
         $service->owner_id = $request->owner_id;
         $service->path = $request->file('image')->hashName();
         $service->save();
         
-        return redirect('profile');
+        return redirect('profile/'.$service->owner_id);
     }
 
     public function show(Service $service)
     {
-
-        return view('showService', ['service' => $service]);
+        $user= User::find($service->owner_id);
+        return view('showService', ['service' => $service,'ownerName' => $user->name]);
     }
 
     public function delete(Service $service)
     {
         unlink(public_path() . '/storage/images/' .$service->path);
         $service->delete();
-        return view('profile');
+        return redirect('profile/'.$service->owner_id);
     }
 
 }

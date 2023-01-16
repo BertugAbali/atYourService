@@ -62,17 +62,29 @@ class UserController extends Controller
         return view('profile', ['user' => $user]);
     }
 
-    public function edit(User $user)
+    public function store(Request $request,User $user)
     {
-        return view('users.edit', ['user' => $user]);
+        $request->validate([
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+        ]);
+
+        $request->file('image')->store('public/users-avatar');
+
+        // Delete the old profile icon
+        unlink(public_path() . '/storage/users-avatar/' .$user->avatar);
+
+        $user->avatar = $request->file('image')->hashName();
+        $user->save();
+        return redirect('profile/'.$user->id);
     }
 
-    // This function update the player as a service provider
+
+    // This function update the player
 
     public function update(Request $request, User $user)
     {
         $user->update($request->all());
-        return redirect('profile');
+        return redirect('profile/'.$user->id);
     }
 
     // This functions delete the user and his/her belonged services with their images.
@@ -88,9 +100,6 @@ class UserController extends Controller
         $user->delete();
         return redirect('/');
     }
-
-
-
 
     public function redirectToStripe($id)
     {
@@ -132,14 +141,14 @@ class UserController extends Controller
                 $onboardLink = $this->stripeClient->accountLinks->create([
                     'account'     => $seller->stripe_connect_id,
                     'refresh_url' => route('redirect.stripe', ['id' => $seller->id]),
-                    'return_url'  => route('save.stripe', ['token' => $token]),
+                    'return_url'  => route('save.stripe', ['token' => $token,'id' => $seller->id]),
                     'type'        => 'account_onboarding'
                 ]);
 
                 return redirect($onboardLink->url);
 
             } catch (\Exception $exception){
-                return back()->withErrors(['message' => $exception->getMessage()]) ;
+                return redirect('profile/'.$seller->id)->withErrors(['message' => $exception->getMessage()]) ;
             }
         }
 
@@ -149,7 +158,7 @@ class UserController extends Controller
             return redirect($loginLink->url);
 
         } catch (\Exception $exception){
-            return back()->withErrors(['message' => $exception->getMessage()]) ;
+            return redirect('profile/'.$seller->id)->withErrors(['message' => $exception->getMessage()]) ;
         }
     }
 
@@ -169,7 +178,7 @@ class UserController extends Controller
             'completed_stripe_onboarding' => true
         ]);
 
-        return redirect('profile');
+        return redirect('profile/'.$seller->id);
     }
 
 
