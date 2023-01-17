@@ -27,42 +27,45 @@ class UserController extends Controller
         $this->databaseManager = $databaseManager;
     }
 
-     // it will return pay page based on chosed service
+    // it will return pay page based on chosed service
 
-     public function stripe(Service $service)
-     {
-         return view('stripe',compact('service'));
-     }
+    public function stripe(Service $service)
+    {
+        return view('stripe', compact('service'));
+    }
 
-     // It will return auth user profile.
+    // It will return auth user profile.
 
-
-     public function profile($id)
-     {
+    public function profile($id)
+    {
 
         $user = User::find($id);
 
-            $balance =  $user->completed_stripe_onboarding ?  $this->stripeClient
+       // $balance =$this->stripeClient->balance->retrieve([]);
+
+          
+
+        $balance =  $user->completed_stripe_onboarding ?  $this->stripeClient
             ->balance->retrieve(null, ['stripe_account' => $user->stripe_connect_id])
-            ->available[0]
+            ->pending[0]
             ->amount : 0;
-    
-    
-            return view('profile', [
-                'balance' => $balance
-            ]);
-     }
-   
+
+
+        return view('profile', [
+            'balance' => $balance/100
+        ]);
+    }
+
     public function show(String $user_id)
     {
         $user = new User();
 
         $user = User::where('id', $user_id)->get();
-       
+
         return view('profile', ['user' => $user]);
     }
 
-    public function store(Request $request,User $user)
+    public function store(Request $request, User $user)
     {
         $request->validate([
             'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
@@ -71,11 +74,13 @@ class UserController extends Controller
         $request->file('image')->store('public/users-avatar');
 
         // Delete the old profile icon
-        unlink(public_path() . '/storage/users-avatar/' .$user->avatar);
+        if ($user->avatar != "avatar.png") {
+        unlink(public_path() . '/storage/users-avatar/' . $user->avatar);
+        }
 
         $user->avatar = $request->file('image')->hashName();
         $user->save();
-        return redirect('profile/'.$user->id);
+        return redirect('profile/' . $user->id);
     }
 
 
@@ -84,7 +89,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $user->update($request->all());
-        return redirect('profile/'.$user->id);
+        return redirect('profile/' . $user->id);
     }
 
     // This functions delete the user and his/her belonged services with their images.
@@ -92,11 +97,11 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $services = DB::table('services')->where('owner_id', $user->id)->get()->toArray();
-        foreach($services as $service){
-            unlink(public_path() . '/storage/images/' .$service->path);
+        foreach ($services as $service) {
+            unlink(public_path() . '/storage/images/' . $service->path);
         }
-        if($user->avatar != 'avatar.png'){
-            unlink(public_path() . '/storage/users-avatar/' .$user->avatar);
+        if ($user->avatar != "avatar.png") {
+            unlink(public_path() . '/storage/users-avatar/' . $user->avatar);
         }
         DB::table('services')->where('owner_id', $user->id)->delete();
         DB::table('stripe_state_tokens')->where('seller_id', $user->id)->delete();
@@ -144,14 +149,13 @@ class UserController extends Controller
                 $onboardLink = $this->stripeClient->accountLinks->create([
                     'account'     => $seller->stripe_connect_id,
                     'refresh_url' => route('redirect.stripe', ['id' => $seller->id]),
-                    'return_url'  => route('save.stripe', ['token' => $token,'id' => $seller->id]),
+                    'return_url'  => route('save.stripe', ['token' => $token, 'id' => $seller->id]),
                     'type'        => 'account_onboarding'
                 ]);
 
                 return redirect($onboardLink->url);
-
-            } catch (\Exception $exception){
-                return redirect('profile/'.$seller->id)->withErrors(['message' => $exception->getMessage()]) ;
+            } catch (\Exception $exception) {
+                return redirect('profile/' . $seller->id)->withErrors(['message' => $exception->getMessage()]);
             }
         }
 
@@ -159,17 +163,16 @@ class UserController extends Controller
 
             $loginLink = $this->stripeClient->accounts->createLoginLink($seller->stripe_connect_id);
             return redirect($loginLink->url);
-
-        } catch (\Exception $exception){
-            return redirect('profile/'.$seller->id)->withErrors(['message' => $exception->getMessage()]) ;
+        } catch (\Exception $exception) {
+            return redirect('profile/' . $seller->id)->withErrors(['message' => $exception->getMessage()]);
         }
     }
 
     public function saveStripeAccount($token)
     {
         $stripeToken = $this->databaseManager->table('stripe_state_tokens')
-                        ->where('token', '=', $token)
-                        ->first();
+            ->where('token', '=', $token)
+            ->first();
 
         if (is_null($stripeToken)) {
             abort(404);
@@ -181,7 +184,7 @@ class UserController extends Controller
             'completed_stripe_onboarding' => true
         ]);
 
-        return redirect('profile/'.$seller->id);
+        return redirect('profile/' . $seller->id);
     }
 
 
@@ -194,13 +197,13 @@ class UserController extends Controller
         ]);
 
         $seller = User::find($service->owner_id);
-     //   $buyer = User::find($buyer_id);
+        //   $buyer = User::find($buyer_id);
 
         try {
 
             // Purchase a product
             $charge = $this->stripeClient->charges->create([
-                'amount'      => ($service->price)*100,  
+                'amount'      => ($service->price) * 100,
                 'currency'    => 'eur',
                 'source'      => $request->stripeToken,
                 'description' => 'This is an example charge.'
@@ -208,21 +211,15 @@ class UserController extends Controller
 
             // Transfer funds to seller
             $this->stripeClient->transfers->create([
-                'amount'             => ($service->price)*95,  
+                'amount'             => ($service->price) * 95,
                 'currency'           => 'eur',
                 'source_transaction' => $charge->id,
                 'destination'        => $seller->stripe_connect_id
             ]);
-
         } catch (ApiErrorException $exception) {
-            return back()->withErrors(['message' => $exception->getMessage()]) ;
+            return back()->withErrors(['message' => $exception->getMessage()]);
         }
 
         return redirect('/');
     }
-
-
-
 }
-
-

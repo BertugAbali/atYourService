@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
-                <img src="{{asset('storage/images/'.$service->path)}}" alt="{{$service->name}}" class="card-img-top">
+                <img src="@if (file_exists( public_path() . '/images/'. $service->path . '.png')){{asset('storage/images/'.$service->path)}} @else {{asset('storage/images/empty-service.png')}} @endif" alt="{{$service->name}}" class="card-img-top">
                 <div class="card-body">
                     <h3 class="card-title">{{$service->title}}</h3>
                     <p class="card-text">{{$service->detail}}</p>

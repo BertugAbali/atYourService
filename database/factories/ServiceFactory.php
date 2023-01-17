@@ -22,7 +22,6 @@ class ServiceFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'detail' => fake()->text(1000),
-            'owner' => fake()->name(),
             'area' => $array[array_rand($array)],
             'price' => fake()->numberBetween(10,1000),   
             'owner_id' => fake()->numberBetween(1,50),
