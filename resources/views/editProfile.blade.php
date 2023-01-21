@@ -10,7 +10,7 @@
                 <div class="card-header">{{ __('Edit Your Profile') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('edit.user',['user' => Auth::user()]) }}">
+                    <form method="POST" action="{{ route('edit.profile') }}">
                         @csrf
 
                         <div class="row mb-3">
@@ -31,7 +31,7 @@
                             <label for="phone" class="col-md-4 col-form-label text-md-end">{{ __('Phone') }}</label>
 
                             <div class="col-md-6">
-                                <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror" name="phone" value="" required autocomplete="phone" autofocus>
+                                <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror" name="phone" value="{{Auth::user()->phone??''}}"  autocomplete="phone" autofocus>
 
                                 @error('phone')
                                 <span class="invalid-feedback" role="alert">
@@ -45,7 +45,7 @@
                             <label for="address" class="col-md-4 col-form-label text-md-end">{{ __('Address') }}</label>
 
                             <div class="col-md-6">
-                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="" required autocomplete="address" autofocus>
+                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{Auth::user()->address??''}}"  autocomplete="address" autofocus>
 
                                 @error('address')
                                 <span class="invalid-feedback" role="alert">

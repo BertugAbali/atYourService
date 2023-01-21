@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Service_Areas;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,14 +19,21 @@ class ServiceFactory extends Factory
      */
     public function definition()
     {
-        $array = array("Photographer", "Programmer", "Designer", "Writer", "Content Creator","Artist");
+        $service_areas =  Service_Areas::all();
+
+        $areas_names=array();
+
+        foreach ($service_areas as $area) {
+            $areas_names[]=$area->name;
+        }
+
         return [
             'title' => fake()->sentence(),
             'detail' => fake()->text(1000),
-            'area' => $array[array_rand($array)],
+            'area' => $areas_names[array_rand($areas_names)],
             'price' => fake()->numberBetween(10,1000),   
             'owner_id' => fake()->numberBetween(1,50),
-            'path' => 'ofNe8xphAelNN8vWJ6YbBNnHT5U4ED71F19bO754.jpg',
+            'path' => 'empty-service.png',
         ];
     }
 }

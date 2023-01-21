@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="iconLabel">Change Profile Icon</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ url('user/upload/'.Auth::user()->id) }}" enctype="multipart/form-data" id="upload-image" method="POST">
+            <form action="{{ url('profile/upload/')}}" enctype="multipart/form-data" id="upload-image" method="POST">
                 @csrf
                 <div class="modal-body text-center">
                     <label class="form-label" for="image">Upload New Icon</label>

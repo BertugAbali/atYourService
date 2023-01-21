@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use App\Models\User;
 
-use Illuminate\Support\Facades\DB;
-
-
 use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Auth;
+
 
 class ServiceController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -36,11 +41,12 @@ class ServiceController extends Controller
         $service->detail = $request->detail;
         $service->price = $request->price;
         $service->area = $request->area;
-        $service->owner_id = $request->owner_id;
+        $service->owner_id = Auth::user()->id;
         $service->path = $request->file('image')->hashName();
         $service->save();
         
-        return redirect('profile/'.$service->owner_id);
+        $services = Service::where('owner_id', Auth::user()->id)->paginate(20);
+        return view('showServices', compact('services'));
     }
 
     public function show(Service $service)
@@ -51,9 +57,19 @@ class ServiceController extends Controller
 
     public function delete(Service $service)
     {
-        unlink(public_path() . '/storage/images/' .$service->path);
+        if(file_exists(public_path() . '/storage/images/' .$service->path)){
+            unlink(public_path() . '/storage/images/' .$service->path);
+        }
         $service->delete();
-        return redirect('profile/'.$service->owner_id);
+        $services = Service::where('owner_id',Auth::user()->id)->paginate(20);
+        return view('showServices',compact('services'));
     }
+
+     // It will return page of creating new service page.
+
+     public function createService()
+     {
+         return view('startNewService');
+     }
 
 }

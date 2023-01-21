@@ -41,9 +41,12 @@
                 @if(!($loop->last))
                 <hr>
                 @endif
-              
-
+            
                 @endforeach
+
+                <div class="d-flex justify-content-center"> 
+            {!! $services->links('pagination::bootstrap-5') !!}
+        </div>
             </div>
         </div>
     </div>

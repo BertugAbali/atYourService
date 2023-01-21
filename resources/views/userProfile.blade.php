@@ -11,7 +11,7 @@
             <div class="col-lg-4">
                 <div class="card mb-4">
                     <div class="card-body text-center">
-                        <img src=" @if (Auth::user()->avatar){{asset('storage/users-avatar/'. Auth::user()->avatar)}} @else {{asset('storage/users-avatar/avatar.png')}} @endif" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                        <img src=" @if (isset($user->avatar)){{asset('storage/users-avatar/'. $user->avatar)}} @else {{asset('storage/users-avatar/avatar.png')}} @endif" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
                         <h5 class="my-3">{{ $user->name}}</h5>
                         @if ( $user->is_provider)
                         <p class="text-muted mb-3">{{ $user->area}}</p>
@@ -57,7 +57,7 @@
                                     <p class="mb-0">About</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">{{ $user->about}}</p>
+                                    <p class="text-muted mb-0">{{ $user->about??''}}</p>
                                 </div>
                             </div>
                             <hr>
@@ -66,7 +66,7 @@
                                     <p class="mb-0">Country</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                    <p class="text-muted mb-0">{{ $user->country??''}}</p>
                                 </div>
                             </div>
                             <hr>
@@ -75,7 +75,7 @@
                                     <p class="mb-0">Phone</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                                    <p class="text-muted mb-0">{{ $user->phone??''}}</p>
                                 </div>
                             </div>
                             @if ( $user->is_provider)

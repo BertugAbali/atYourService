@@ -2,7 +2,7 @@
 <div class="col-md-3">
     <div class="card h-100">
     <a href="{{ route('show.service', ['service' => $service]) }}">
-            <img src="@if (file_exists( public_path() . '/images/'. $service->path . '.png')){{asset('storage/images/'.$service->path)}} @else {{asset('storage/images/empty-service.png')}} @endif" alt="{{$service->name}}" class="card-img-top">
+            <img src="@if (file_exists(public_path() . '/storage/images/'. $service->path)){{asset('storage/images/'.$service->path)}} @else {{asset('storage/images/empty-service.png')}} @endif" alt="{{$service->name}}" class="card-img-top">
         </a>
         <div class="card-body">
         <a href="{{ route('show.service', ['service' => $service]) }}">

@@ -9,8 +9,15 @@
             <div class="card">
                 <div class="card-header">{{ __('Become Service Provider') }}</div>
 
+                @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <strong>Error:</strong>  {{ $errors->first() }} 
+                </div>
+              
+                @endif
+
                 <div class="card-body">
-                    <form method="POST" action="{{ url('user/update/'.Auth::user()->id) }}">
+                    <form method="POST" action="{{ url('profile/update/') }}">
                         @csrf
 
                         <div class="row mb-3">
@@ -19,8 +26,8 @@
 
                             <div class="col-md-6">
                                 <select class="form-select" aria-label="Default select example" id="area"  name="area">
-                                    @foreach ($areas as $area)
-                                    <option value="{{$area->name}}">{{$area->name}}</option>
+                                    @foreach ($service_areas as $service_area)
+                                    <option value="{{$service_area->name}}">{{$service_area->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -28,6 +35,8 @@
                         </div>
 
                         <input id="is_provider" hidden type="number" class="form-control" name="is_provider" value="1" required>
+
+                        <input id="name" hidden type="text" class="form-control" name="name" value="{{Auth::user()->name}}" required>
 
                         <div class="row mb-3">
                             <label for="exprience" class="col-md-4 col-form-label text-md-end">{{ __('Exprience') }}</label>
@@ -50,14 +59,9 @@
 
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <textarea required class="form-control @error('about') is-invalid @enderror" id="about"  name="about"></textarea>
+                                    <textarea required class="form-control" id="about"  name="about"></textarea>
                                 </div>
 
-                                @error('about')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
                             </div>
                         </div>
 

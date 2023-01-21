@@ -17,29 +17,29 @@
             <div class="col-lg-4">
                 <div class="card mb-4">
                     <div class="card-body text-center">
-                        <a href="#icon"  data-bs-toggle="modal"><img src=" @if (Auth::user()->avatar){{asset('storage/users-avatar/'. 
-                        Auth::user()->avatar)}} @else {{asset('storage/users-avatar/avatar.png')}} @endif" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;"></a>
+                        <a href="#icon"  data-bs-toggle="modal"><img src=" @if (isset(Auth::user()->avatar)){{asset('storage/users-avatar/'. 
+                        Auth::user()->avatar)}} @else {{asset('storage/users-avatar/avatar.png')}} @endif" alt="avatar" class="rounded-circle img-fluid" style="width: 150px; height:150px"></a>
 
                         <h5 class="my-3">{{Auth::user()->name}}</h5>
                         @if (Auth::user()->is_provider)
                         <p class="text-muted mb-3">{{Auth::user()->area}}</p>
                         @endif
 
-                        <form method="GET" enctype="multipart/form-data" id="deleteUser" action="{{ url('edit/user')}}">
+                        <form method="GET" enctype="multipart/form-data" id="editProfile" action="{{ url('edit/profile')}}">
                             @csrf
                             <button type="submit" class="btn btn-outline-success mb-3" id="submit">Edit Profile</button>
 
                         </form>
 
                         @if (!Auth::user()->is_provider)
-                        <form method="POST" enctype="multipart/form-data" id="becomeProvider" action="{{ route('becomeProvider') }}">
+                        <form method="GET" enctype="multipart/form-data" id="becomeProvider" action="{{ url('becomeProvider')}}">
                             @csrf
                             <button type="submit" class="btn btn-outline-success mb-3" id="submit">Become Service Provider</button>
 
                         </form>
                         @endif
 
-                        <form method="POST" enctype="multipart/form-data" id="deleteUser" action="{{ route('destroy.user',['user' => Auth::user()]) }}">
+                        <form method="POST" enctype="multipart/form-data" id="deleteProfile" action="{{ route('destroy.profile') }}">
                             @csrf
                             <button type="submit" class="btn btn-outline-danger " id="submit">Delete Your Profile</button>
 
@@ -53,9 +53,9 @@
                         @if (!Auth::user()->completed_stripe_onboarding)
                         <div class="col">
                             <p class="text-danger"> Not Connected </p>
-                            <p class="text-muted">After it's connected then you can create and see your services. </p>
+                            <p class="text-muted">Once connected, you can create and view your services.</p>
 
-                            <form method="POST" enctype="multipart/form-data" id="startNewService" action="{{ route('redirect.stripe',['id' => Auth::user()->id]) }}">
+                            <form method="POST" enctype="multipart/form-data" id="startNewService" action="{{ route('redirect.stripe') }}">
                                 @csrf
                                 <button type="submit" class="btn btn-warning" id="submit">Connect Stripe Account</button>
                             </form>
@@ -82,7 +82,7 @@
                         </div>
                         <hr>
                         <p class="text-success"> Connected </p>
-                        <form method="POST" enctype="multipart/form-data" id="startNewService" action="{{ route('redirect.stripe', ['id' => Auth::user()->id]) }}">
+                        <form method="POST" enctype="multipart/form-data" id="startNewService" action="{{ route('redirect.stripe') }}">
                             @csrf
                             <button type="submit" class="btn btn-outline-primary" id="submit">View Stripe Account</button>
                         </form>
@@ -174,7 +174,7 @@
                                 </form>
                             </div>
                             <div class="col-sm-6">
-                                <form method="POST" enctype="multipart/form-data" id="showServices" action="{{ route('show.ownedServices',['user' => Auth::user()]) }}">
+                                <form method="POST" enctype="multipart/form-data" id="showServices" action="{{ route('show.ownedServices') }}">
                                     @csrf
                                     <button type="submit" class="btn btn-outline-primary" id="submit">See Your Services</button>
 

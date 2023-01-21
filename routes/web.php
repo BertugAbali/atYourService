@@ -3,9 +3,7 @@
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\StripePaymentController;
 
-use App\Models\Service;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,8 +21,8 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes(['verify'=>true]);
 
-Route::get('/stripe/{id}', [UserController::class, 'redirectToStripe'])->name('redirect.stripe');
-Route::post('/stripe/{id}', [UserController::class, 'redirectToStripe'])->name('redirect.stripe');
+Route::get('/stripe', [UserController::class, 'redirectToStripe'])->name('redirect.stripe');
+Route::post('/stripe', [UserController::class, 'redirectToStripe'])->name('redirect.stripe');
 Route::get('/connect/{token}', [UserController::class, 'saveStripeAccount'])->name('save.stripe');
 
 Route::post('/buy/{service}', [UserController::class, 'stripe'])->name('stripe');
@@ -32,25 +30,25 @@ Route::get('/buy/{service}', [UserController::class, 'stripe'])->name('stripe');
 Route::post('/purchase/{service}', [UserController::class, 'purchase'])->name('complete.purchase');
 Route::get('/purchase/{service}', [UserController::class, 'purchase'])->name('complete.purchase');
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index']);
+Route::get('/home', [HomeController::class, 'index']);
 Route::get('area/{area}', [HomeController::class, 'area'])->name('search.area');
 
-Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile');
-Route::post('/ownedServices/{user}', [HomeController::class, 'showServices'])->name('show.ownedServices');
-Route::post('/becomeProvider', [HomeController::class, 'becomeProvider'])->name('becomeProvider');
+Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+Route::post('/ownedServices', [UserController::class, 'showServices'])->name('show.ownedServices');
+Route::get('/becomeProvider', [UserController::class, 'becomeProvider']);
 
 Route::post('save', [ServiceController::class, 'store'])->name('save.service');
 Route::get('show/{service}', [ServiceController::class, 'show'])->name('show.service');
 Route::post('delete/{service}', [ServiceController::class, 'delete'])->name('delete.service');
-Route::post('/createService', [HomeController::class, 'createService'])->name('create.service');
-Route::get('/createService', [HomeController::class, 'createService'])->name('create.service');
+Route::post('/createService', [ServiceController::class, 'createService'])->name('create.service');
+Route::get('/createService', [ServiceController::class, 'createService'])->name('create.service');
 
-Route::get('edit/user', [HomeController::class, 'editUser']);
-Route::post('/user/upload/{user}', [UserController::class, 'store']);
-Route::post('/user/update/{user}', [UserController::class, 'update']);
-Route::post('/user/edit/{user}', [UserController::class, 'update'])->name('edit.user');
-Route::post('/user/destroy/{user}', [UserController::class, 'destroy'])->name('destroy.user');
+Route::get('edit/profile', [UserController::class, 'editProfile']);
+Route::post('/profile/upload', [UserController::class, 'store']);
+Route::post('/profile/update', [UserController::class, 'update']);
+Route::post('/profile/edit', [UserController::class, 'update'])->name('edit.profile');
+Route::post('/profile/destroy', [UserController::class, 'destroy'])->name('destroy.profile');
 
-Route::get('user/{id}', [HomeController::class, 'userProfile'])->name('show.profile');
+Route::get('user/{id}', [UserController::class, 'userProfile'])->name('show.profile');
 

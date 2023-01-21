@@ -21,29 +21,14 @@
 
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Photographer']) }}">
-                            Photographer
+                    @foreach ($service_areas as $service_area)
+
+                    <a class="dropdown-item" href="{{ route('search.area', ['area' => $service_area->name]) }}">
+                    {{$service_area->name}}
                         </a>
 
-                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Programmer']) }}">
-                            Programmer
-                        </a>
+                    @endforeach
 
-                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Designer']) }}">
-                            Designer
-                        </a>
-
-                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Writer']) }}">
-                            Writer
-                        </a>
-
-                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Content Creator']) }}">
-                            Content Creator
-                        </a>
-
-                        <a class="dropdown-item" href="{{ route('search.area', ['area' => 'Artist']) }}">
-                            Artist
-                        </a>
 
                     </div>
                 </li>
